@@ -1,0 +1,24 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    addressable (2.2.1)
+    bson (1.0.7)
+    em-http-request (0.2.12)
+      addressable (>= 2.0.0)
+      eventmachine (>= 0.12.9)
+    eventmachine (0.12.10)
+    json (1.4.6)
+    mongo (1.0.8)
+      bson (>= 1.0.5)
+    rack (1.2.1)
+    sinatra (1.0)
+      rack (>= 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  em-http-request
+  json
+  mongo
+  sinatra
