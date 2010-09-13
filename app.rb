@@ -1,5 +1,16 @@
+STREAMING_URL = 'http://stream.twitter.com/1/statuses/sample.json'
+TWITTER_USERNAME = 'username'
+TWITTER_PASSWORD = 'password'
+
 configure do
-  DB = Mongo::Connection.new.db("mongotweets")
+  if ENV['MONGOHQ_URL']
+    uri = URI.parse(ENV['MONGOHQ_URL'])
+    conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL'])
+    DB = conn.db(uri.path.gsub(/^\//, ''))
+  else
+    DB = Mongo::Connection.new.db("mongo-twitter-streaming")
+  end
+  
   DB.create_collection("tweets", :capped => true, :size => 10485760)
 end
 
@@ -9,15 +20,14 @@ get '/' do
   erb :index
 end
 
-STREAMING_URL = 'http://stream.twitter.com/1/statuses/sample.json'
-
 EM.schedule do
-  http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ 'joslynesser', 'ESSER556' ] }
+  http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }
   buffer = ""
   http.stream do |chunk|
     buffer += chunk
     while line = buffer.slice!(/.+\r?\n/)
-      DB['tweets'].insert(JSON.parse(line))
+      tweet = JSON.parse(line)
+      DB['tweets'].insert(tweet) if tweet['text']
     end
   end
 end
