@@ -1,6 +1,6 @@
 STREAMING_URL = 'http://stream.twitter.com/1/statuses/sample.json'
-TWITTER_USERNAME = 'username'
-TWITTER_PASSWORD = 'password'
+TWITTER_USERNAME = ENV['TWITTER_USERNAME']
+TWITTER_PASSWORD = ENV['TWITTER_PASSWORD']
 
 configure do
   if ENV['MONGOHQ_URL']
