@@ -1,3 +1,6 @@
 <% @tweets.each do |tweet| %>
-  <p><%= tweet['user']['screen_name'] %></p>
+  <p>
+    <strong><%= tweet['user']['screen_name'] %></strong>:
+    <%= tweet['text'] %>
+  </p>
 <% end %>
